@@ -11,26 +11,6 @@ from dotenv import load_dotenv
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-# Function to check available models and choose a suitable one
-def choose_text_model(model_name="gemini-t5", model_version="v1beta"):
-  try:
-    # Use ListModels to get available models (replace with actual method call)
-    models = genai.ListModels()  # Replace with the actual ListModels call for your library
-    
-    # Check if the desired model is available in the specified version
-    for model in models:
-      if model.name == f"models/{model_name}" and model.version == model_version:
-        return model.name  # Return model name if found
-  except Exception as e:
-    print(f"Error retrieving available models: {e}")
-  
-  # If desired model not found, choose an alternative
-  print(f"Model '{model_name}' not found in version '{model_version}'. Using 'gpt-neo-125M' instead.")
-  return "models/gpt-neo-125M"  # Replace with your preferred alternative model
-
-# Get the chosen model name
-
-
 def generate_text_streamlit(prompt, text_area_placeholder=None,
                                    temperature=0.5,
                                    max_tokens=3000, top_p=1, frequency_penalty=0,
@@ -39,7 +19,6 @@ def generate_text_streamlit(prompt, text_area_placeholder=None,
     model = genai.GenerativeModel('gemini-pro')
     response = model.generate_content([prompt])
     st.write(response.text, unsafe_allow_html=True)
-
 
 
 st.title("AI Recipe Generator")
@@ -56,7 +35,7 @@ output_format = ("""
                     <h1> FAQ </h1><p>question answers</p>
                  """)
  
-recipe = st.text_input("Enter your prompt", value="Pasta")
+recipe = st.text_input("Enter your prompt")
 image_prompt = recipe + " realistic, cinematic"
  
 if st.button("Create Recipe"):
